@@ -1,10 +1,11 @@
-import {FC, useEffect} from "react";
+import {FC, useEffect,useState} from "react";
 
 import {useAppDispatch, useAppSelector} from "../../hooks";
 import {newsAction} from "../../redux/slice/news.slice";
 import {NewsCard} from "../NewsCard/NewsCard";
-import {Box, Grid, Paper} from "@mui/material";
+import {Box, Button, Grid, Paper} from "@mui/material";
 import { styled } from '@mui/material/styles';
+import {NavLink, useSearchParams} from "react-router-dom";
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: '#fff',
@@ -16,11 +17,25 @@ const Item = styled(Paper)(({ theme }) => ({
 const News: FC = () => {
     const {news, loading} = useAppSelector(state => state.newsReducer)
 
+    const [searchParams, setSearchParams]: [URLSearchParams, Function] = useSearchParams({_limit: '10'});
+
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        dispatch(newsAction.getAll());
-    }, [dispatch]);
+        dispatch(newsAction.getAll({_limit: searchParams.get('_limit')}));
+    }, [dispatch, searchParams]);
+
+    let limit = Number(searchParams.get('_limit'));
+    const handler = (): void => {
+        try {
+            let res = limit + 10
+            if (searchParams.get('_limit')) {
+                setSearchParams({_limit: res.toString()});
+            }
+        } catch (e) {
+            console.log(e)
+        }
+    };
 
     return (
         <div>
@@ -33,6 +48,11 @@ const News: FC = () => {
                             {news && news.map((oneNews, index) => <Grid item xs={2} sm={4} md={4} key={index}>
                                 <Item><NewsCard key={oneNews.id} oneNews={oneNews}/></Item></Grid>)}
                         </Grid>
+                        <Button style={{marginTop:20}} variant="contained" disableElevation
+                                onClick={handler}
+                        >
+                            Load More
+                        </Button>
                     </Box>
                 )}
         </div>

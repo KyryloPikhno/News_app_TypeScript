@@ -5,21 +5,27 @@ import {postService} from "../../services";
 import {IPost} from "../../interfaces";
 
 interface INewsState<IPost> {
-    news: IPost[]
+    news: IPost[] | []
+    newsById: IPost | null
     loading: boolean
+}
+
+interface IGet {
+    _limit: string | number | null;
 }
 
 const initialState: INewsState<IPost> = {
     news: [],
+    newsById: null,
     loading: false,
 };
 
-const getAll = createAsyncThunk<IPost[], void>(
+const getAll = createAsyncThunk<IPost[], IGet>(
     'newsSlice/getAll',
 
-    async (_, {rejectWithValue}) => {
+    async ({_limit}, {rejectWithValue}) => {
         try {
-            const {data} = await postService.getAll();
+            const {data} = await postService.getAll(_limit);
             return data;
         } catch (e) {
             const err = e as AxiosError
@@ -28,10 +34,28 @@ const getAll = createAsyncThunk<IPost[], void>(
     }
 );
 
+// const getById = createAsyncThunk<IPost, void>(
+//     'newsSlice/getById',
+//     async ({id}, {rejectWithValue}) => {
+//         try {
+//             const {data} = await postService.getById(id)
+//             return data
+//         } catch (e) {
+//             const err = e as AxiosError
+//             return rejectWithValue(err.response?.data);
+//         }
+//     }
+// );
+
 const newsSlice = createSlice({
         name: 'newsSlice',
         initialState,
-        reducers: {},
+        reducers: {
+            deleteById: (state, action) => {
+                const index = state.news.findIndex(oneNews => oneNews.id === action.payload)
+                state.news.splice(index, 1)
+            }
+        },
         extraReducers: builder =>
             builder
                 .addCase(getAll.fulfilled, (state, action) => {
@@ -44,13 +68,24 @@ const newsSlice = createSlice({
                 .addCase(getAll.rejected, (state) => {
                     state.loading = false
                 })
+                // .addCase(getById.fulfilled, (state, action) => {
+                //     state.newsById = action.payload
+                //     state.loading = false
+                // })
+                // .addCase(getById.pending, (state) => {
+                //     state.loading = true
+                // })
+                // .addCase(getById.rejected, (state) => {
+                //     state.loading = false
+                // })
     }
 );
 
-const {reducer: newsReducer} = newsSlice;
+const {reducer: newsReducer, actions:{deleteById}} = newsSlice;
 
 const newsAction = {
     getAll,
+    deleteById
 };
 
 export {newsReducer, newsAction};

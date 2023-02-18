@@ -1,14 +1,18 @@
 import {Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Typography} from "@mui/material";
 import {FC} from "react";
+import { useAppDispatch } from "../../hooks";
 
 import {IPost} from "../../interfaces";
+import {newsAction} from "../../redux/slice/news.slice";
 
 type IProps = {
     oneNews: IPost
 };
 const NewsCard: FC<IProps> = ({oneNews}) => {
 
-    const {title, body} = oneNews
+    const dispatch = useAppDispatch();
+
+    const {id, title, body} = oneNews;
 
     return (
         <Card sx={{minHeight: 310, maxHeight: 630}}>
@@ -31,6 +35,10 @@ const NewsCard: FC<IProps> = ({oneNews}) => {
             <CardActions>
                 <Button sx={{height: 20}} size="small" color="primary">
                     Details
+                </Button>
+                <Button onClick={() => dispatch(newsAction.deleteById(id))} sx={{height: 20}} size="small"
+                        color="secondary">
+                    Delete
                 </Button>
             </CardActions>
         </Card>

@@ -11,10 +11,10 @@ const MainLayout: FC = () => {
 
         <Fragment>
             <CssBaseline/>
-            <Container style={{marginBottom:20}}>
+            <Container style={{marginBottom: 20}}>
                 <Header/>
             </Container>
-            <Container style={{marginBottom:20}}>
+            <Container style={{marginBottom: 20, minHeight: 800, height: '75%'}}>
                 <Outlet/>
             </Container>
             <Container>

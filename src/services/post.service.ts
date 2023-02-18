@@ -4,7 +4,12 @@ import {IPost} from "../interfaces";
 import {urls} from "../configs";
 
 const postService = {
-    getAll: (): AxiosRes<IPost[]> => axiosService(urls.posts)
+    getAll: (_limit: string | number | null): AxiosRes<IPost[]> => axiosService(urls.posts, {
+        params: {
+            _limit
+        }
+    }),
+    getById: (id: string): AxiosRes<IPost> => axiosService(`${urls.posts}/${id}`)
 };
 
 export {postService};

@@ -15,11 +15,11 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { NavLink } from "react-router-dom";
 
 
-const pages = ['Products', 'Pricing', 'Blog'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 const Header: FC = () => {
     const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
+
     const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -145,6 +145,12 @@ const Header: FC = () => {
                             sx={{my: 2, color: 'white', display: 'block'}}
                         >
                             <NavLink to={'/profile'}>Profile</NavLink>
+                        </Button>
+                        <Button
+                            onClick={handleCloseNavMenu}
+                            sx={{my: 2, color: 'white', display: 'block'}}
+                        >
+                            <NavLink to={'/login'}>Login</NavLink>
                         </Button>
                     </Box>
 
