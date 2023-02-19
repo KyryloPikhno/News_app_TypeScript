@@ -1,4 +1,4 @@
-import {FC, useState} from "react";
+import React, {FC, useState,useEffect} from "react";
 import {
     AppBar,
     Avatar,
@@ -13,11 +13,16 @@ import {
 } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 import { NavLink } from "react-router-dom";
+import {useNavigate} from "react-router";
+
 
 
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
-
 const Header: FC = () => {
+
+
+
+
     const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
 
     const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
@@ -36,6 +41,22 @@ const Header: FC = () => {
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
     };
+
+     const navigate= useNavigate()
+
+    const handleAuth=() => {
+        console.log(localStorage.getItem('username'));
+        if (!localStorage.getItem('username')) {
+            navigate('/login');
+        }
+        if(localStorage.getItem('username')) {
+            navigate('/profile');
+        }
+    };
+
+     const handleLogout =()=>{
+         console.log('l')
+     }
 
     return (
         <AppBar position="static">
@@ -59,7 +80,6 @@ const Header: FC = () => {
                     >
                         News App
                     </Typography>
-
                     <Box sx={{flexGrow: 1, display: {xs: 'flex', md: 'none'}}}>
                         <IconButton
                             size="large"
@@ -101,12 +121,14 @@ const Header: FC = () => {
                             >
                                 <NavLink to={'/news'}>News</NavLink>
                             </Button>
-                            <Button
-                                onClick={handleCloseNavMenu}
-                                sx={{my: 2, color: 'white', display: 'block'}}
-                            >
-                                <NavLink to={'/profile'}>Profile</NavLink>
-                            </Button>
+
+                                <Button
+                                    onClick={handleCloseNavMenu}
+                                    sx={{my: 2, color: 'white', display: 'block'}}
+                                >
+                                    <nav onClick={()=>handleAuth}>{!localStorage.getItem('username') ?'Profile': 'Profile'}</nav>
+                                </Button>
+
                         </Menu>
                     </Box>
                     <Typography
@@ -144,16 +166,30 @@ const Header: FC = () => {
                             onClick={handleCloseNavMenu}
                             sx={{my: 2, color: 'white', display: 'block'}}
                         >
-                            <NavLink to={'/profile'}>Profile</NavLink>
+                            <NavLink to={!localStorage.getItem('username') ?'/login': '/profile'}>{!localStorage.getItem('username') ?'Login': 'Profile'}</NavLink>
                         </Button>
                         <Button
                             onClick={handleCloseNavMenu}
                             sx={{my: 2, color: 'white', display: 'block'}}
                         >
-                            <NavLink to={'/login'}>Login</NavLink>
+                            <NavLink to={'/login'}>{localStorage.getItem('username') &&'Logout'}</NavLink>
                         </Button>
+                        {/*{!state ?*/}
+                        {/*    <Button*/}
+                        {/*        onClick={handleCloseNavMenu}*/}
+                        {/*        sx={{my: 2, color: 'white', display: 'block'}}*/}
+                        {/*    >*/}
+                        {/*        <NavLink to={'/login'}>Login</NavLink>*/}
+                        {/*    </Button>*/}
+                        {/*    :*/}
+                        {/*    <Button*/}
+                        {/*        onClick={handleCloseNavMenu}*/}
+                        {/*        sx={{my: 2, color: 'white', display: 'block'}}*/}
+                        {/*    >*/}
+                        {/*        <NavLink to={'/profile'}>Profile</NavLink>*/}
+                        {/*    </Button>*/}
+                        {/*}*/}
                     </Box>
-
                     <Box sx={{flexGrow: 0}}>
                         <Tooltip title="Open settings">
                             <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>

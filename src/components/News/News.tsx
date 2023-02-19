@@ -5,7 +5,7 @@ import {newsAction} from "../../redux/slice/news.slice";
 import {NewsCard} from "../NewsCard/NewsCard";
 import {Box, Button, Grid, Paper} from "@mui/material";
 import { styled } from '@mui/material/styles';
-import {NavLink, useSearchParams} from "react-router-dom";
+import {useSearchParams} from "react-router-dom";
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: '#fff',

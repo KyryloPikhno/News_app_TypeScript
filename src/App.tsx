@@ -3,6 +3,7 @@ import {Route, Routes} from "react-router";
 
 import {HomePage, LoginPage, NewsPage, ProfilePage} from "./pages";
 import {MainLayout} from "./layouts";
+import {PrivateRoute} from "./utils";
 
 
 const App: FC = () => {
@@ -12,7 +13,7 @@ const App: FC = () => {
                 <Route path={'/login'} element={<LoginPage/>}/>
                 <Route path={'/'} element={<HomePage/>}/>
                 <Route path={'/news'} element={<NewsPage/>}/>
-                <Route path={'/profile'} element={<ProfilePage/>}/>
+                <Route path={'/profile'} element={<PrivateRoute><ProfilePage/></PrivateRoute>}/>
             </Route>
         </Routes>
     );
