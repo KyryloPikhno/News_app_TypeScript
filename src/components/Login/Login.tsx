@@ -1,116 +1,92 @@
-import {Button, TextField} from "@mui/material";
-import { useForm, SubmitHandler, Controller,useFormState } from "react-hook-form";
-
-import React, { FC } from "react";
-import {loginValidator} from "../../validators";
+import React, {FC, useState} from "react";
+import {Box, Button, Container, Grid, TextField, Typography} from "@mui/material";
+import {useForm} from "react-hook-form"
 import {yupResolver} from "@hookform/resolvers/yup";
+import { loginValidator } from "../../validators";
+import {useNavigate} from "react-router";
 
-    interface ISignInForm {
-        login: string;
-        password: string;
-    }
-const Login:FC = () => {
-    const {handleSubmit, reset, control} = useForm<ISignInForm>({
-        // resolver: yupResolver(loginValidator)
+type FormValues = {
+    username: string;
+    password: string;
+};
+
+const Login: FC = () => {
+    const {register, handleSubmit, formState: {errors}} = useForm<FormValues>({
+        resolver: yupResolver(loginValidator)
     });
-    // const { errors } = useFormState({
-    //     control
-    // })
+
+    const navigate = useNavigate()
 
 
-        const onSubmit: SubmitHandler<ISignInForm> = data => console.log(data);
-
+    const submit = (obj: FormValues) => {
+        const {username, password} = obj;
+        if (username && password) {
+            localStorage.setItem('username', username);
+            localStorage.setItem('password', password);
+            navigate('/profile')
+        }
+    };
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)}>
-            <Controller
-                control={control}
-                name="password"
-                rules={{
-                    required: true
-                }}
-                render={({field, fieldState: {error}}) => (
-                    <TextField {...field} type="password" error={error !== undefined} />
-                )}
-            />
-            {/*<Controller*/}
-            {/*    control={control}*/}
-            {/*    name="name"*/}
-            {/*    render={({ field: { onChange, value } }) => (*/}
-            {/*        <TextField onChange={onChange} value={value} label={"Text Value"} />*/}
-            {/*    )}*/}
-            {/*/>*/}
-            <Button>Submit</Button>
-            {/*<Button onClick={() => reset()} variant={"outlined"}>Reset</Button>*/}
-        </form>
-        // <div className="auth-form">
-        //     <Typography variant="h4" component="div">
-        //         Войдите
-        //     </Typography>
-        //     <Typography variant="subtitle1" gutterBottom component="div" className="auth-form__subtitle">
-        //         Чтобы получить доступ
-        //     </Typography>
-        //     <form className="auth-form__form" onSubmit={handleSubmit(onSubmit)}>
-        //         <Controller
-        //             control={control}
-        //             name="login"
-        //             // rules={loginValidation}
-        //             render={({ field }) => (
-        //                 <TextField
-        //                     label="Логин"
-        //                     onChange={(e) => field.onChange(e)}
-        //                     value={field.value}
-        //                     fullWidth={ true }
-        //                     size="small"
-        //                     margin="normal"
-        //                     className="auth-form__input"
-        //                     error={!!errors.login?.message}
-        //                     helperText={ errors?.login?.message }
-        //                 />
-        //             )}
-        //         />
-        //         <Controller
-        //             control={control}
-        //             name="password"
-        //             // rules={passwordValidation}
-        //             // render={({ field }) => (
-        //                 <TextField
-        //                     label="Пароль"
-        //                     onChange={(e) => field.onChange(e)}
-        //                     value={field.value}
-        //                     fullWidth={ true }
-        //                     size="small"
-        //                     margin="normal"
-        //                     type="password"
-        //                     className="auth-form__input"
-        //                     error={ !!errors?.password?.message }
-        //                     helperText={ errors?.password?.message }
-        //                 />
-        //             )}
-        //         />
-        //         <Button
-        //             type="submit"
-        //             variant="contained"
-        //             fullWidth={ true }
-        //             disableElevation={ true }
-        //             sx={{
-        //                 marginTop: 2
-        //             }}
-        //         >
-        //             Войти
-        //         </Button>
-        //     </form>
-        //
-        //     <div className="auth-form__footer">
-        //         <Typography variant="subtitle1" component="span">
-        //             Нету аккаунта?{" "}
-        //         </Typography>
-        //         <Typography variant="subtitle1" component="span" sx={{ color: 'blue'}}>
-        //             Зарегистрируйтесь
-        //         </Typography>
-        //     </div>
-        // </div>
+        <Container component="main" maxWidth="xs">
+            <Box sx={{marginTop: 26, display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                <Typography component="h1" variant="h5">
+                    Login
+                </Typography>
+                <Box component="form" onSubmit={handleSubmit(submit)} sx={{mt: 3}}>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                            <TextField
+                                fullWidth
+                                label="Username"
+                                type="text"
+                                id="username"
+                                autoComplete="new-username"
+                                {...register('username')}
+                            />
+                            <Box>
+                                {errors.username && (
+                                    < Typography component="p" sx={{
+                                        mt: 2,
+                                        color: "red",
+                                        fontSize: 10,
+                                        textAlign: "center"
+                                    }}>{errors.username.message}</Typography>
+                                )}
+                            </Box> </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                fullWidth
+                                label="Password"
+                                type="password"
+                                id="password"
+                                autoComplete="new-password"
+                                {...register('password')}
+                            />
+                            {errors.password && (
+                                <Typography component="p" sx={{
+                                    mt: 2,
+                                    color: "red",
+                                    fontSize: 10,
+                                    textAlign: "center"
+                                }}>{errors.password.message}</Typography>
+                            )}
+                        </Grid>
+                    </Grid>
+                    <Button type="submit"
+                            fullWidth
+                            variant="contained"
+                            sx={{mt: 2, mb: 1}}
+                    >
+                        Login
+                    </Button>
+                </Box>
+            </Box>
+        </Container>
     );
 };
 
+
 export {Login};
+
+
