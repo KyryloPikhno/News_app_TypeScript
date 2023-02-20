@@ -1,9 +1,12 @@
-import React, {FC, useState} from "react";
 import {Box, Button, Container, Grid, TextField, Typography} from "@mui/material";
-import {useForm} from "react-hook-form"
+import React, {FC, useState} from "react";
 import {yupResolver} from "@hookform/resolvers/yup";
-import { loginValidator } from "../../validators";
 import {useNavigate} from "react-router";
+import {useForm} from "react-hook-form"
+
+import { loginValidator } from "../../validators";
+import {authService} from "../../services";
+
 
 type FormValues = {
     username: string;
@@ -11,19 +14,26 @@ type FormValues = {
 };
 
 const Login: FC = () => {
-    const {register, handleSubmit, formState: {errors}} = useForm<FormValues>({
+    const {register, handleSubmit, formState: {errors,isValid}} = useForm<FormValues>({
         resolver: yupResolver(loginValidator)
     });
 
-    const navigate = useNavigate()
+    const [loginError, setLoginError] = useState<string | boolean>(false);
 
+    const navigate = useNavigate();
 
-    const submit = (obj: FormValues) => {
-        const {username, password} = obj;
-        if (username && password) {
-            localStorage.setItem('username', username);
-            localStorage.setItem('password', password);
-            navigate('/profile')
+    const submit = (obj: FormValues): void => {
+        try {
+            const {username, password} = obj;
+            if (username === process.env.REACT_APP_USERNAME && password === process.env.REACT_APP_PASSWORD) {
+                authService.setAuth(obj);
+
+                navigate('/profile');
+            } else {
+                setLoginError('Wrong username or password')
+            }
+        } catch (e) {
+            console.log(e)
         }
     };
 
@@ -43,17 +53,10 @@ const Login: FC = () => {
                                 id="username"
                                 autoComplete="new-username"
                                 {...register('username')}
+                                error={(!!errors.username?.message) || (!!loginError)}
+                                helperText={errors.username?.message}
                             />
-                            <Box>
-                                {errors.username && (
-                                    < Typography component="p" sx={{
-                                        mt: 2,
-                                        color: "red",
-                                        fontSize: 10,
-                                        textAlign: "center"
-                                    }}>{errors.username.message}</Typography>
-                                )}
-                            </Box> </Grid>
+                        </Grid>
                         <Grid item xs={12}>
                             <TextField
                                 fullWidth
@@ -62,20 +65,15 @@ const Login: FC = () => {
                                 id="password"
                                 autoComplete="new-password"
                                 {...register('password')}
+                                error={(!!errors.password?.message) || (!!loginError)}
+                                helperText={errors.password?.message || loginError}
                             />
-                            {errors.password && (
-                                <Typography component="p" sx={{
-                                    mt: 2,
-                                    color: "red",
-                                    fontSize: 10,
-                                    textAlign: "center"
-                                }}>{errors.password.message}</Typography>
-                            )}
                         </Grid>
                     </Grid>
-                    <Button type="submit"
-                            fullWidth
+                    <Button  type="submit"
+                             fullWidth
                             variant="contained"
+                            disabled={!isValid}
                             sx={{mt: 2, mb: 1}}
                     >
                         Login
@@ -85,7 +83,6 @@ const Login: FC = () => {
         </Container>
     );
 };
-
 
 export {Login};
 

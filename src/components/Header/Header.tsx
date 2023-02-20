@@ -1,68 +1,47 @@
-import React, {FC, useState,useEffect} from "react";
+import React, {FC, useState} from "react";
 import {
     AppBar,
-    Avatar,
     Box,
     Button,
     Container,
     IconButton, Menu,
-    MenuItem,
     Toolbar,
-    Tooltip,
     Typography
 } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 import { NavLink } from "react-router-dom";
 import {useNavigate} from "react-router";
 
+import {authService} from "../../services";
 
 
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 const Header: FC = () => {
-
-
-
-
     const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
-
-    const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElNav(event.currentTarget);
-    };
-    const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorElUser(event.currentTarget);
     };
 
     const handleCloseNavMenu = () => {
         setAnchorElNav(null);
     };
 
-    const handleCloseUserMenu = () => {
-        setAnchorElUser(null);
-    };
+    const navigate = useNavigate();
 
-     const navigate= useNavigate()
+    const handleLogout = ():void => {
+        try {
+            authService.removeAuth();
 
-    const handleAuth=() => {
-        console.log(localStorage.getItem('username'));
-        if (!localStorage.getItem('username')) {
             navigate('/login');
-        }
-        if(localStorage.getItem('username')) {
-            navigate('/profile');
+        } catch (e) {
+            console.log(e)
         }
     };
-
-     const handleLogout =()=>{
-         console.log('l')
-     }
 
     return (
         <AppBar position="static">
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
-                    {/*<AdbIcon sx={{display: {xs: 'none', md: 'flex'}, mr: 1}}/>*/}
                     <Typography
                         variant="h6"
                         noWrap
@@ -78,7 +57,7 @@ const Header: FC = () => {
                             textDecoration: 'none',
                         }}
                     >
-                        News App
+                        NewsApp
                     </Typography>
                     <Box sx={{flexGrow: 1, display: {xs: 'flex', md: 'none'}}}>
                         <IconButton
@@ -122,12 +101,13 @@ const Header: FC = () => {
                                 <NavLink to={'/news'}>News</NavLink>
                             </Button>
 
-                                <Button
-                                    onClick={handleCloseNavMenu}
-                                    sx={{my: 2, color: 'white', display: 'block'}}
-                                >
-                                    <nav onClick={()=>handleAuth}>{!localStorage.getItem('username') ?'Profile': 'Profile'}</nav>
-                                </Button>
+                            {localStorage.getItem('username') && <Button
+                                onClick={handleCloseNavMenu}
+                                sx={{my: 2, color: 'white', display: 'block'}}
+                            >
+                                <NavLink
+                                    to={!localStorage.getItem('username') ? '/login' : '/profile'}>Profile</NavLink>
+                            </Button>}
 
                         </Menu>
                     </Box>
@@ -142,83 +122,54 @@ const Header: FC = () => {
                             flexGrow: 1,
                             fontFamily: 'monospace',
                             fontWeight: 700,
-                            letterSpacing: '.3rem',
+                            letterSpacing: '.2rem',
                             color: 'inherit',
                             textDecoration: 'none',
                         }}
                     >
-                        News App
+                        NewsApp
                     </Typography>
                     <Box sx={{flexGrow: 1, display: {xs: 'none', md: 'flex'}}}>
                         <Button
                             onClick={handleCloseNavMenu}
                             sx={{my: 2, color: 'white', display: 'block'}}
                         >
-                            <NavLink to={'/'}>Home</NavLink>
+                            <nav onClick={()=>navigate('/')}>Home</nav>
                         </Button>
                         <Button
                             onClick={handleCloseNavMenu}
                             sx={{my: 2, color: 'white', display: 'block'}}
                         >
-                            <NavLink to={'/news'}>News</NavLink>
+                            <nav onClick={()=>navigate('/news')}>News</nav>
                         </Button>
-                        <Button
-                            onClick={handleCloseNavMenu}
-                            sx={{my: 2, color: 'white', display: 'block'}}
-                        >
-                            <NavLink to={!localStorage.getItem('username') ?'/login': '/profile'}>{!localStorage.getItem('username') ?'Login': 'Profile'}</NavLink>
-                        </Button>
-                        <Button
-                            onClick={handleCloseNavMenu}
-                            sx={{my: 2, color: 'white', display: 'block'}}
-                        >
-                            <NavLink to={'/login'}>{localStorage.getItem('username') &&'Logout'}</NavLink>
-                        </Button>
-                        {/*{!state ?*/}
-                        {/*    <Button*/}
-                        {/*        onClick={handleCloseNavMenu}*/}
-                        {/*        sx={{my: 2, color: 'white', display: 'block'}}*/}
-                        {/*    >*/}
-                        {/*        <NavLink to={'/login'}>Login</NavLink>*/}
-                        {/*    </Button>*/}
-                        {/*    :*/}
-                        {/*    <Button*/}
-                        {/*        onClick={handleCloseNavMenu}*/}
-                        {/*        sx={{my: 2, color: 'white', display: 'block'}}*/}
-                        {/*    >*/}
-                        {/*        <NavLink to={'/profile'}>Profile</NavLink>*/}
-                        {/*    </Button>*/}
-                        {/*}*/}
                     </Box>
-                    <Box sx={{flexGrow: 0}}>
-                        <Tooltip title="Open settings">
-                            <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
-                                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg"/>
-                            </IconButton>
-                        </Tooltip>
-                        <Menu
-                            sx={{mt: '45px'}}
-                            id="menu-appbar"
-                            anchorEl={anchorElUser}
-                            anchorOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            keepMounted
-                            transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            open={Boolean(anchorElUser)}
-                            onClose={handleCloseUserMenu}
+                    <Box sx={{flexGrow: 0, display: {xs: 'none', md: 'flex'}}}>
+                        <Button
+                            sx={{my: 2, color: 'white', display: 'block'}}
                         >
-                            {settings.map((setting) => (
-                                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                    <Typography textAlign="center">{setting}</Typography>
-                                </MenuItem>
-                            ))}
-                        </Menu>
+                            <nav onClick={()=>navigate(!localStorage.getItem('username') ? '/login' : '/profile')}
+                                >{!localStorage.getItem('username') ? 'Login' : 'Profile'}</nav>                        </Button>
+                        <Button
+                            sx={{my: 2, color: 'white', display: 'block'}}
+                        >
+                            <nav onClick={handleLogout}>{localStorage.getItem('username') && 'Logout'}</nav>
+                        </Button>
                     </Box>
+                        <Box sx={{flexGrow: 0, display: {xs: 'flex', md: 'none'}}}>
+                                {
+                                    localStorage.getItem('username')?
+                                        <Button onClick={handleLogout}
+                                            sx={{my: 2, color: 'white', display: 'block'}}
+                                        >
+                                       Logout
+                                        </Button>
+                                    :
+                            <Button onClick={()=>navigate('/login')} sx={{my: 2, color: 'white', display: 'block'}}
+                            >
+                                       Login
+                            </Button>
+                                }
+                        </Box>
                 </Toolbar>
             </Container>
         </AppBar>

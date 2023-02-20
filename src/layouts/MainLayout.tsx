@@ -14,13 +14,13 @@ const MainLayout: FC = () => {
             <Container style={{marginBottom: 20}}>
                 <Header/>
             </Container>
-            <Container style={{marginBottom: 20, minHeight: 800, height: '75%'}}>
+            <Container style={{marginBottom: 20, minHeight: 800}}>
                 <Outlet/>
             </Container>
             <Container>
                 <Footer/>
             </Container>
-        </Fragment>
+         </Fragment>
     );
 };
 

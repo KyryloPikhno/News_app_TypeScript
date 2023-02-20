@@ -1,9 +1,9 @@
-import {Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Typography} from "@mui/material";
+import {Button, Card, CardActions, CardContent, CardMedia, Typography} from "@mui/material";
 import {FC} from "react";
-import { useAppDispatch } from "../../hooks";
 
-import {IPost} from "../../interfaces";
+import { useAppDispatch } from "../../hooks";
 import {newsAction} from "../../redux/slice/news.slice";
+import {IPost} from "../../interfaces";
 
 type IProps = {
     oneNews: IPost
@@ -16,7 +16,6 @@ const NewsCard: FC<IProps> = ({oneNews}) => {
 
     return (
         <Card sx={{minHeight: 310, maxHeight: 630}}>
-            <CardActionArea>
                 <CardMedia
                     component="img"
                     height="310"
@@ -31,7 +30,6 @@ const NewsCard: FC<IProps> = ({oneNews}) => {
                         {body}
                     </Typography>
                 </CardContent>
-            </CardActionArea>
             <CardActions>
                 <Button sx={{height: 20}} size="small" color="primary">
                     Details

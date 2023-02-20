@@ -1,9 +1,11 @@
 import {combineReducers, configureStore} from "@reduxjs/toolkit";
 
+import {profileReducer} from '../slice/profile.slice';
 import {newsReducer} from "../slice/news.slice";
 
 const rootReducer = combineReducers({
-    newsReducer,
+    profileReducer,
+    newsReducer
 });
 
 const setUpStore = () => configureStore({

@@ -1,12 +1,14 @@
+import {Box, Card} from "@mui/material";
 import {FC} from "react";
 
 const Home: FC = () => {
 
-
     return (
-        <div>
-            Home
-        </div>
+        <Box sx={{flexGrow: 0}}>
+            <Card sx={{height: 810}}>
+
+            </Card>
+        </Box>
     );
 };
 

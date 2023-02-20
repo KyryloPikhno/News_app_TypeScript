@@ -82,7 +82,6 @@ const newsSlice = createSlice({
 );
 
 const {reducer: newsReducer, actions:{deleteById}} = newsSlice;
-
 const newsAction = {
     getAll,
     deleteById
