@@ -1,6 +1,5 @@
 interface IConfig {
     BASE_URL: string;
-
     PROFILE_URL: string;
     USERNAME: string;
     PASSWORD: string;
