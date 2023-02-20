@@ -11,7 +11,6 @@ type IProps = {
 };
 
 const NewsCard: FC<IProps> = ({oneNews}) => {
-
     const dispatch = useAppDispatch();
 
     const navigate = useNavigate();
