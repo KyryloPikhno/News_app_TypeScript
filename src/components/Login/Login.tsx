@@ -6,6 +6,7 @@ import {useForm} from "react-hook-form"
 
 import { loginValidator } from "../../validators";
 import {authService} from "../../services";
+import {config} from "../../configs";
 
 
 type FormValues = {
@@ -25,7 +26,7 @@ const Login: FC = () => {
     const submit = (obj: FormValues): void => {
         try {
             const {username, password} = obj;
-            if (username === process.env.REACT_APP_USERNAME && password === process.env.REACT_APP_PASSWORD) {
+            if (username === config.USERNAME && password === config.PASSWORD) {
                 authService.setAuth(obj);
 
                 navigate('/profile');

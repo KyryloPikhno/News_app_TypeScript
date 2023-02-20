@@ -1,7 +1,11 @@
-const baseURL: string = 'https://jsonplaceholder.typicode.com';
+import {config} from "./config";
+
+const baseURL: string = config.BASE_URL;
+
+const profileURL: string = config.PROFILE_URL;
 
 const urls: { posts: string; } = {
     posts: '/posts',
 };
 
-export {baseURL, urls};
+export {baseURL, profileURL, urls};

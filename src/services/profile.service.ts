@@ -1,10 +1,11 @@
-import {AxiosRes, } from "./axios.service";
-
-import {IPost} from "../interfaces";
 import axios from "axios";
 
+import {AxiosRes} from "./axios.service";
+import {IProfile} from "../interfaces";
+import {config} from "../configs";
+
 const profileService = {
-    get: (): AxiosRes<IPost[]> => axios.get('https://api.github.com/users/KyryloPikhno'),
+    get: (): AxiosRes<IProfile> => axios.get(config.PROFILE_URL),
 };
 
 export {profileService};

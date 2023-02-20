@@ -8,8 +8,7 @@ const postService = {
         params: {
             _limit
         }
-    }),
-    getById: (id: string): AxiosRes<IPost> => axiosService(`${urls.posts}/${id}`)
+    })
 };
 
 export {postService};

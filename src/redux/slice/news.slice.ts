@@ -10,7 +10,7 @@ interface INewsState<IPost> {
     loading: boolean
 }
 
-interface IGet {
+interface IGetAll {
     _limit: string | number | null;
 }
 
@@ -20,7 +20,7 @@ const initialState: INewsState<IPost> = {
     loading: false,
 };
 
-const getAll = createAsyncThunk<IPost[], IGet>(
+const getAll = createAsyncThunk<IPost[], IGetAll>(
     'newsSlice/getAll',
 
     async ({_limit}, {rejectWithValue}) => {
@@ -33,19 +33,6 @@ const getAll = createAsyncThunk<IPost[], IGet>(
         }
     }
 );
-
-// const getById = createAsyncThunk<IPost, void>(
-//     'newsSlice/getById',
-//     async ({id}, {rejectWithValue}) => {
-//         try {
-//             const {data} = await postService.getById(id)
-//             return data
-//         } catch (e) {
-//             const err = e as AxiosError
-//             return rejectWithValue(err.response?.data);
-//         }
-//     }
-// );
 
 const newsSlice = createSlice({
         name: 'newsSlice',
@@ -68,16 +55,6 @@ const newsSlice = createSlice({
                 .addCase(getAll.rejected, (state) => {
                     state.loading = false
                 })
-                // .addCase(getById.fulfilled, (state, action) => {
-                //     state.newsById = action.payload
-                //     state.loading = false
-                // })
-                // .addCase(getById.pending, (state) => {
-                //     state.loading = true
-                // })
-                // .addCase(getById.rejected, (state) => {
-                //     state.loading = false
-                // })
     }
 );
 
