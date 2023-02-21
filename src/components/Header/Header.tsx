@@ -180,7 +180,6 @@ const Header: FC = () => {
                             <nav onClick={handleLogout}>{t('Logout.Logout')}</nav>
                         </Button>}
                     </Box>
-
                     <Box sx={{flexGrow: 0, display: {xs: 'flex', md: 'none'}}}>
                         {
                             (username && password) ?
