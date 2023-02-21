@@ -2,7 +2,6 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import React, {FC,  useState} from "react";
 import {useTranslation} from "react-i18next";
 import {useNavigate} from "react-router";
-import {NavLink} from "react-router-dom";
 import MenuIcon from '@mui/icons-material/Menu';
 import {
     AppBar,
@@ -26,6 +25,8 @@ const Header: FC = () => {
 
     const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
 
+    const navigate = useNavigate();
+
     const handleChange = async (event: SelectChangeEvent) => {
         await setLanguage(event.target.value as string);
 
@@ -40,7 +41,11 @@ const Header: FC = () => {
         setAnchorElNav(null);
     };
 
-    const navigate = useNavigate();
+    const navigator = (route: string ):void => {
+        navigate(route);
+
+        setAnchorElNav(null);
+    };
 
     const handleLogout = (): void => {
         try {
@@ -107,24 +112,22 @@ const Header: FC = () => {
                             }}
                         >
                             <Button
-                                onClick={handleCloseNavMenu}
-                                sx={{my: 2, color: 'white', display: 'block'}}
+                                onClick={()=>navigator('/')}
+                                sx={{my: 2, color: 'black', display: 'block'}}
                             >
-                                <NavLink to={'/'}>{t('Home.Home')}</NavLink>
+                                {t('Home.Home')}
                             </Button>
                             <Button
-                                onClick={handleCloseNavMenu}
-                                sx={{my: 2, color: 'white', display: 'block'}}
+                                onClick={()=>navigator('/news')}
+                                sx={{my: 2, color: 'black', display: 'block'}}
                             >
-                                <NavLink to={'/news'}>{t('News.News')}</NavLink>
+                                {t('News.News')}
                             </Button>
-
                             {(username && password) && <Button
-                                onClick={handleCloseNavMenu}
-                                sx={{my: 2, color: 'white', display: 'block'}}
+                                onClick={()=>navigator(!(username && password) ? '/login' : '/profile')}
+                                sx={{my: 2, color: 'black', display: 'block'}}
                             >
-                                <NavLink
-                                    to={!(username && password) ? '/login' : '/profile'}>{t('Profile.Profile')}</NavLink>
+                                {t('Profile.Profile')}
                             </Button>}
                         </Menu>
                     </Box>

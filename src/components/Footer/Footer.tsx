@@ -1,3 +1,4 @@
+import {useTranslation} from "react-i18next";
 import {FC} from "react";
 import {
     AppBar,
@@ -8,6 +9,7 @@ import {
 
 
 const Footer: FC = () => {
+    const {t} = useTranslation();
 
     return (
         <AppBar position="static">
@@ -22,13 +24,14 @@ const Footer: FC = () => {
                             mr: 2,
                             display: {md: 'flex'},
                             fontFamily: 'monospace',
-                            fontWeight: 700,
-                            letterSpacing: '.3rem',
+                            fontWeight: 750,
+                            fontSize:15,
+                            letterSpacing: '.2rem',
                             color: 'inherit',
                             textDecoration: 'none',
                         }}
                     >
-                        NewsApp
+                        {t('NewsApp.NewsApp')}
                     </Typography>
 
                 </Toolbar>
