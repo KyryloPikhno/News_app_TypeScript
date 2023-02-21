@@ -41,7 +41,7 @@ const Login: FC = () => {
     return (
         <Container component="main" maxWidth="xs">
             <Box sx={{marginTop: 26, display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                <Typography component="h1" variant="h5">
+                <Typography component="h1" variant="h3">
                     Login
                 </Typography>
                 <Box component="form" onSubmit={handleSubmit(submit)} sx={{mt: 3}}>
