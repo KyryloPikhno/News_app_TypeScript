@@ -1,22 +1,36 @@
-import React, {FC, useState} from "react";
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import React, {FC,  useState} from "react";
+import {useTranslation} from "react-i18next";
+import {useNavigate} from "react-router";
+import {NavLink} from "react-router-dom";
+import MenuIcon from '@mui/icons-material/Menu';
 import {
     AppBar,
     Box,
     Button,
     Container,
-    IconButton, Menu,
+    FormControl,
+    IconButton, InputLabel, Menu,
+    MenuItem,
     Toolbar,
     Typography
 } from "@mui/material";
-import MenuIcon from '@mui/icons-material/Menu';
-import { NavLink } from "react-router-dom";
-import {useNavigate} from "react-router";
 
 import {authService} from "../../services";
 
 
 const Header: FC = () => {
+    const {t, i18n} = useTranslation();
+
+    const [language, setLanguage] = useState<undefined | string>('');
+
     const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
+
+    const handleChange = async (event: SelectChangeEvent) => {
+        await setLanguage(event.target.value as string);
+
+        await i18n.changeLanguage(event.target.value);
+    };
 
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElNav(event.currentTarget);
@@ -28,7 +42,7 @@ const Header: FC = () => {
 
     const navigate = useNavigate();
 
-    const handleLogout = ():void => {
+    const handleLogout = (): void => {
         try {
             authService.removeAuth();
 
@@ -37,6 +51,9 @@ const Header: FC = () => {
             console.log(e)
         }
     };
+
+    const username: string | null = localStorage.getItem('username')
+    const password: string | null = localStorage.getItem('password')
 
     return (
         <AppBar position="static">
@@ -57,7 +74,8 @@ const Header: FC = () => {
                             textDecoration: 'none',
                         }}
                     >
-                        NewsApp
+                        {t('NewsApp.NewsApp')}
+
                     </Typography>
                     <Box sx={{flexGrow: 1, display: {xs: 'flex', md: 'none'}}}>
                         <IconButton
@@ -92,23 +110,22 @@ const Header: FC = () => {
                                 onClick={handleCloseNavMenu}
                                 sx={{my: 2, color: 'white', display: 'block'}}
                             >
-                                <NavLink to={'/'}>Home</NavLink>
+                                <NavLink to={'/'}>{t('Home.Home')}</NavLink>
                             </Button>
                             <Button
                                 onClick={handleCloseNavMenu}
                                 sx={{my: 2, color: 'white', display: 'block'}}
                             >
-                                <NavLink to={'/news'}>News</NavLink>
+                                <NavLink to={'/news'}>{t('News.News')}</NavLink>
                             </Button>
 
-                            {localStorage.getItem('username') && <Button
+                            {(username && password) && <Button
                                 onClick={handleCloseNavMenu}
                                 sx={{my: 2, color: 'white', display: 'block'}}
                             >
                                 <NavLink
-                                    to={!localStorage.getItem('username') ? '/login' : '/profile'}>Profile</NavLink>
+                                    to={!(username && password) ? '/login' : '/profile'}>{t('Profile.Profile')}</NavLink>
                             </Button>}
-
                         </Menu>
                     </Box>
                     <Typography
@@ -118,7 +135,9 @@ const Header: FC = () => {
                         href="/"
                         sx={{
                             mr: 2,
-                            display: {xs: 'flex', md: 'none'},
+                            position: 'absolute',
+                            left: "40%",
+                            display: {md: 'none'},
                             flexGrow: 1,
                             fontFamily: 'monospace',
                             fontWeight: 700,
@@ -127,49 +146,71 @@ const Header: FC = () => {
                             textDecoration: 'none',
                         }}
                     >
-                        NewsApp
+                        {t('NewsApp.NewsApp')}
                     </Typography>
                     <Box sx={{flexGrow: 1, display: {xs: 'none', md: 'flex'}}}>
                         <Button
                             onClick={handleCloseNavMenu}
                             sx={{my: 2, color: 'white', display: 'block'}}
                         >
-                            <nav onClick={()=>navigate('/')}>Home</nav>
+                            <nav onClick={() => navigate('/')}>{t('Home.Home')}</nav>
                         </Button>
                         <Button
                             onClick={handleCloseNavMenu}
                             sx={{my: 2, color: 'white', display: 'block'}}
                         >
-                            <nav onClick={()=>navigate('/news')}>News</nav>
+                            <nav onClick={() => navigate('/news')}>{t('News.News')}</nav>
                         </Button>
                     </Box>
                     <Box sx={{flexGrow: 0, display: {xs: 'none', md: 'flex'}}}>
-                        <Button
-                            sx={{my: 2, color: 'white', display: 'block'}}
-                        >
-                            <nav onClick={()=>navigate(!localStorage.getItem('username') ? '/login' : '/profile')}
-                                >{!localStorage.getItem('username') ? 'Login' : 'Profile'}</nav>                        </Button>
-                        <Button
-                            sx={{my: 2, color: 'white', display: 'block'}}
-                        >
-                            <nav onClick={handleLogout}>{localStorage.getItem('username') && 'Logout'}</nav>
-                        </Button>
-                    </Box>
-                        <Box sx={{flexGrow: 0, display: {xs: 'flex', md: 'none'}}}>
-                                {
-                                    localStorage.getItem('username')?
-                                        <Button onClick={handleLogout}
-                                            sx={{my: 2, color: 'white', display: 'block'}}
-                                        >
-                                       Logout
-                                        </Button>
-                                    :
-                            <Button onClick={()=>navigate('/login')} sx={{my: 2, color: 'white', display: 'block'}}
-                            >
-                                       Login
+                        {!(username && password) ? <Button sx={{my: 2, color: 'white', display: 'block'}}>
+                                <nav onClick={() => navigate(!(username && password) ? '/login' : '/profile')}>
+                                    {t('Login.Login')}
+                                </nav>
+                            </Button> :
+                            <Button sx={{my: 2, color: 'white', display: 'block'}}>
+                                <nav onClick={() => navigate(!(username && password) ? '/login' : '/profile')}>
+                                    {t('Profile.Profile')}
+                                </nav>
                             </Button>
-                                }
-                        </Box>
+                        }
+                        {(username && password) && <Button
+                            sx={{my: 2, color: 'white', display: 'block'}}
+                        >
+                            <nav onClick={handleLogout}>{t('Logout.Logout')}</nav>
+                        </Button>}
+                    </Box>
+
+                    <Box sx={{flexGrow: 0, display: {xs: 'flex', md: 'none'}}}>
+                        {
+                            (username && password) ?
+                                <Button onClick={handleLogout}
+                                        sx={{my: 2, color: 'white', display: 'block'}}
+                                >
+                                    {t('Logout.Logout')}
+                                </Button>
+                                :
+                                <Button onClick={() => navigate('/login')}
+                                        sx={{my: 2, color: 'white', display: 'block'}}
+                                >
+                                    {t('Login.Login')}
+                                </Button>
+                        }
+                    </Box>
+                    <FormControl sx={{m: 1, minWidth: 80}}>
+                        <InputLabel id="demo-simple-select-autowidth-label">{t('Language.Language')}</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-autowidth-label"
+                            id="demo-simple-select-autowidth"
+                            value={language}
+                            onChange={handleChange}
+                            autoWidth
+                            label="language"
+                        >
+                            <MenuItem value={'uk'}>{t('UK.UK')}</MenuItem>
+                            <MenuItem value={'en'}>{t('EN.EN')}</MenuItem>
+                        </Select>
+                    </FormControl>
                 </Toolbar>
             </Container>
         </AppBar>

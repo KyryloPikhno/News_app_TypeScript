@@ -4,6 +4,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 
 import {setUpStore} from "./redux";
+import './utils/i18next';
 import App from './App';
 
 const store = setUpStore()

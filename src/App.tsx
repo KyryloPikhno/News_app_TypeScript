@@ -6,7 +6,11 @@ import {MainLayout} from "./layouts";
 import {PrivateRoute} from "./utils";
 
 
+
 const App: FC = () => {
+
+
+
     return (
         <Routes>
             <Route path={'/'} element={<MainLayout/>}>
