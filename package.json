@@ -1,6 +1,6 @@
 {
-  "homepage": "https://kyrylopikhno.github.io/News_app_TypeScript",
-  "name": "untitled",
+  "homepage": "https://kyrylopikhno.github.io/news_app_typescript",
+  "name": "news_app_typescript",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
