@@ -57,6 +57,7 @@
     ]
   },
   "devDependencies": {
-    "@types/joi": "^17.2.3"
+    "@types/joi": "^17.2.3",
+    "gh-pages": "^5.0.0"
   }
 }
