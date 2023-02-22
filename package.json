@@ -2,7 +2,7 @@
   "name": "untitled",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://kyrylopikhno.github.io/News_app_TypeScript",
+  "homepage": "https://KyryloPikhno.github.io/News_app_TypeScript",
   "dependencies": {
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
