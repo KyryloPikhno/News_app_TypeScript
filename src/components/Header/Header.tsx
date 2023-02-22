@@ -41,7 +41,8 @@ const Header: FC = () => {
         setAnchorElNav(null);
     };
 
-    const navigator = (route: string ):void => {
+    const navigator = (route: string): void => {
+
         navigate(route);
 
         setAnchorElNav(null);
