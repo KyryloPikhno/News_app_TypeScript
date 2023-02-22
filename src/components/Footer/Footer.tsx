@@ -31,6 +31,7 @@ const Footer: FC = () => {
                             textDecoration: 'none',
                         }}
                     >
+
                         {t('NewsApp.NewsApp')}
                     </Typography>
 
