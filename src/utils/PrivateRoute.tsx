@@ -8,10 +8,10 @@ const PrivateRoute: FC<IAuthRouteProps> = ({children}) => {
     const navigate = useNavigate()
 
     useEffect(() => {
-        if(!localStorage.getItem('username')&&!localStorage.getItem('password')){
+        if (!localStorage.getItem('username') && !localStorage.getItem('password')) {
             navigate('/login')
         }
-    }, [children]);
+    }, [children, navigate]);
 
     return children;
 };
