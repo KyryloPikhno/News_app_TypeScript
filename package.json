@@ -1,6 +1,5 @@
 {
-  "homepage": "https://kyrylopikhno.github.io/",
-  "name": "news_app_typescript",
+  "name": "news_app_typescrip",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -60,7 +59,6 @@
     ]
   },
   "devDependencies": {
-    "@types/joi": "^17.2.3",
-    "gh-pages": "^5.0.0"
+    "@types/joi": "^17.2.3"
   }
 }
